@@ -4,14 +4,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
   <title>Vanilla JavaScript App</title>
 </head>
 
 <body>
-  <main>
-    <h1>Vanilla JavaScript App</h1>
-  </main>
+  <div className='maincontainer'>
+    <header>
+      <h1>Azure Marketplace</h1>
+      <h2>SaaS Offer Landing Page Sample</h2>
+    </header>
+
+    <div>
+      <h3>Raw Token</h3>
+      <Log value={queryToken ? queryToken
+        : 'No token found to decode. Is the token parameter present in the query string?' } />
+    </div>
+
+    <div>
+      <h3>Token Summary</h3>
+      <Log isJson={true} value={summaryToken} />
+    </div>
+
+    <div>
+      <h3>Full Token</h3>
+      <Log isJson={true} value={decodedToken} />
+    </div>
+
+    <button onClick="() => decodeToken()" className='button'>
+      Decode Token
+    </button>
+
+    <footer style="margin-top: 10 + '%'">For more information see <a
+        href='https://github.com/mormond/marketplace-saas-landing-page'>https://github.com/mormond/marketplace-saas-landing-page</a>
+    </footer>
+  </div>
 </body>
 
 </html>
