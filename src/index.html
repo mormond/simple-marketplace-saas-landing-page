@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+  <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+    crossorigin="anonymous"></script>
   <title>Vanilla JavaScript App</title>
 </head>
 
@@ -17,28 +19,51 @@
 
     <div>
       <h3>Raw Token</h3>
-      <Log value={queryToken ? queryToken
-        : 'No token found to decode. Is the token parameter present in the query string?' } />
+      <pre id="raw-token"></pre>
     </div>
 
     <div>
-      <h3>Token Summary</h3>
-      <Log isJson={true} value={summaryToken} />
+      <button onClick="decodeToken()" className='button'>
+        Decode Token
+      </button>
     </div>
 
     <div>
       <h3>Full Token</h3>
-      <Log isJson={true} value={decodedToken} />
+      <pre id="full-token"></pre>
     </div>
 
-    <button onClick="() => decodeToken()" className='button'>
-      Decode Token
-    </button>
-
-    <footer style="margin-top: 10 + '%'">For more information see <a
-        href='https://github.com/mormond/marketplace-saas-landing-page'>https://github.com/mormond/marketplace-saas-landing-page</a>
+    <footer style="margin-top: 10%; font-size: smaller;">For more information see <a
+        href='https://github.com/mormond/simple-marketplace-saas-landing-page'>https://github.com/mormond/simple-marketplace-saas-landing-page</a>
     </footer>
   </div>
+
+  <script type="text/javascript">
+    let token = "";
+
+    $(document).ready(function () {
+
+      const urlParams = new URLSearchParams(window.location.search);
+      token = urlParams.get("token");
+
+      $("#raw-token").text(token);
+
+    });
+
+    function decodeToken() {
+
+      $.ajax({
+        url: "api/resolve_token",
+        data: JSON.stringify({ "marketplace_token": token }),
+        type: "POST",
+        dataType: "json"
+      })
+        .done(function (json) {
+          $("#full-token").text(JSON.stringify(json, null, 2));
+        });
+
+    }
+  </script>
 </body>
 
 </html>

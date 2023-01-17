@@ -7,6 +7,15 @@
       "request": "attach",
       "port": 9229,
       "preLaunchTask": "func: host start"
+    },
+    {
+      "name": "SWA",
+      "request": "launch",
+      "type": "msedge",
+      "url": "http://localhost:4280",
+      "preLaunchTask": "swa: start simple-marketplace-saas-landing-page",
+      "webRoot": "${workspaceFolder}/src",
+      "timeout": 30000
     }
   ]
 }

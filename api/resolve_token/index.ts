@@ -20,29 +20,29 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         const access_token = token['access_token'];
 
         const resolve_url = 'https://marketplaceapi.microsoft.com/api/saas/subscriptions/resolve?api-version=2018-08-31'
-        const resolve_headers = {
+        const headers = {
             'Authorization': `Bearer ${access_token}`,
             'Content-Type': 'application/json',
             'x-ms-marketplace-token': `${decoded_mp_token}`
         }
 
-        const resolve_response = await fetch(resolve_url,
+        const response = await fetch(resolve_url,
             {
-                headers: resolve_headers,
+                headers: headers,
                 method: 'POST'
             });
             
-        const resolved_token = await resolve_response.json()
+        const resolved_token = await response.json()
 
-        if (!resolve_response.ok) {
+        if (!response.ok) {
             context.res = {
-                status: resolve_response.status_code,
-                body: resolve_response.status
+                status: response.status_code,
+                body: response.status
             };
         }
         else {
             context.res = {
-                status: resolve_response.status_code,
+                status: response.status_code,
                 body: JSON.stringify(resolved_token)
             };
         }
