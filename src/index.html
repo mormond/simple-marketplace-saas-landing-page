@@ -39,27 +39,28 @@
   </div>
 
   <script type="text/javascript">
-    let token = "";
+    let token = '';
 
     $(document).ready(function () {
 
       const urlParams = new URLSearchParams(window.location.search);
-      token = urlParams.get("token");
+      token = urlParams.get('token');
 
-      $("#raw-token").text(token);
+      $('#raw-token').text(token);
 
     });
 
     function decodeToken() {
 
       $.ajax({
-        url: "api/resolve_token",
-        data: JSON.stringify({ "marketplace_token": token }),
-        type: "POST",
-        dataType: "json"
+        url: 'api/resolve_token',
+        data: JSON.stringify({ 'marketplace_token': token }),
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json'
       })
         .done(function (json) {
-          $("#full-token").text(JSON.stringify(json, null, 2));
+          $('#full-token').text(JSON.stringify(json, null, 2));
         });
 
     }

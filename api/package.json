@@ -10,10 +10,11 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
+    "@azure/functions": "^3.5.0",
     "node-fetch": "2.6.8"
   },
   "devDependencies": {
-    "@azure/functions": "^3.0.0",
+
     "@types/node": "16.x",
     "typescript": "^4.0.0"
   }
