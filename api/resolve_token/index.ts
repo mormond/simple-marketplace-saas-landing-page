@@ -15,40 +15,44 @@ const httpTrigger: AzureFunction = async function (
         error: 'No valid marketplace token found in request body.'
       })
     };
-  } else {
-    const marketplaceToken = req.body.marketplace_token;
-    const decodedToken = decodeURIComponent(marketplaceToken);
 
-    const token = await get_access_token();
-    const accessToken: string = token.access_token;
+    return;
+  }
 
-    const resolveUrl =
-      'https://marketplaceapi.microsoft.com/api/saas/subscriptions/resolve?api-version=2018-08-31';
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-      'x-ms-marketplace-token': `${decodedToken}`
+  const marketplaceToken = req.body.marketplace_token;
+  const decodedToken = decodeURIComponent(marketplaceToken);
+
+  const token = await get_access_token();
+  const accessToken: string = token.access_token;
+
+  const resolveUrl =
+    'https://marketplaceapi.microsoft.com/api/saas/subscriptions/resolve?api-version=2018-08-31';
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+    'Content-Type': 'application/json',
+    'x-ms-marketplace-token': `${decodedToken}`
+  };
+
+  const response = await fetch(resolveUrl, {
+    headers,
+    method: 'POST'
+  });
+
+  if (response.ok !== true) {
+    context.res = {
+      status: response.status,
+      body: JSON.stringify({ error: response.statusText })
     };
 
-    const response = await fetch(resolveUrl, {
-      headers,
-      method: 'POST'
-    });
-
-    const resolvedToken = await response.json();
-
-    if (response.ok !== true) {
-      context.res = {
-        status: response.status_code,
-        body: JSON.stringify({ error: response.status })
-      };
-    } else {
-      context.res = {
-        status: response.status_code,
-        body: JSON.stringify(resolvedToken)
-      };
-    }
+    return;
   }
+
+  const resolvedToken = await response.json();
+
+  context.res = {
+    status: response.status,
+    body: JSON.stringify(resolvedToken)
+  };
 };
 
 export default httpTrigger;
