@@ -11,7 +11,9 @@ const httpTrigger: AzureFunction = async function (
   if (req.body?.marketplace_token === undefined) {
     context.res = {
       status: 400,
-      body: 'No marketplace token found in request body.'
+      body: JSON.stringify({
+        error: 'No valid marketplace token found in request body.'
+      })
     };
   } else {
     const marketplaceToken = req.body.marketplace_token;
@@ -38,7 +40,7 @@ const httpTrigger: AzureFunction = async function (
     if (response.ok !== true) {
       context.res = {
         status: response.status_code,
-        body: response.status
+        body: JSON.stringify({ error: response.status })
       };
     } else {
       context.res = {
