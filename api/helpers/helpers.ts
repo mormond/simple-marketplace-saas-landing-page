@@ -1,32 +1,37 @@
-const fetch = require("node-fetch")
+import fetch = require('node-fetch');
 
-const get_access_token = async () => {
+const getAccessToken = async (): Promise<any> => {
+  const tenantId = process.env.TENANT_ID;
+  const clientId = process.env.CLIENT_ID;
+  const clientSecret = process.env.CLIENT_SECRET;
 
-    const tenant_id = process.env['TENANT_ID'];
-    const client_id = process.env['CLIENT_ID'];
-    const client_secret = process.env['CLIENT_SECRET'];
-
-    const auth_url = `https://login.microsoftonline.com/${tenant_id}/oauth2/token`;
-    const auth_headers = {
-        'content-type': 'application/x-www-form-urlencoded'
+  if (
+    tenantId === undefined ||
+    clientId === undefined ||
+    clientSecret === undefined
+  ) {
+    throw new Error('TenantId, ClientId and ClientSecret are required');
+  } else {
+    const authUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/token`;
+    const headers = {
+      'content-type': 'application/x-www-form-urlencoded'
     };
 
-    const auth_data = new URLSearchParams(
-        {
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'grant_type': 'client_credentials',
-            'resource': '20e940b3-4c77-4b0b-9a53-9e16a1b010a7'
-        });
+    const data = new URLSearchParams([
+      ['client_id', clientId],
+      ['client_secret', clientSecret],
+      ['grant_type', 'client_credentials'],
+      ['resource', '20e940b3-4c77-4b0b-9a53-9e16a1b010a7']
+    ]);
 
-    const response = await fetch(auth_url,
-        {
-            headers: auth_headers,
-            body: auth_data,
-            method: 'POST',
-        });
+    const response = await fetch(authUrl, {
+      headers,
+      body: data,
+      method: 'POST'
+    });
 
     return response.json();
-}
+  }
+};
 
-export { get_access_token }
+export { getAccessToken as get_access_token };
